@@ -4,4 +4,5 @@ target/
 .classpath
 .springBeans
 .idea
+.vscode
 *.iml

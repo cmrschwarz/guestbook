@@ -15,7 +15,8 @@
  */
 package guestbook;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,22 +27,34 @@ import org.junit.jupiter.api.Test;
  */
 class GuestbookEntryUnitTests {
 
-	@Test
-	void rejectsEmptyName() {
+    @Test
+    void rejectsEmptyName() {
 
-		assertThatExceptionOfType(IllegalArgumentException.class)//
-				.isThrownBy(() -> new GuestbookEntry("", "May the 4th be with you!"));
-	}
+        assertThatExceptionOfType(IllegalArgumentException.class) //
+            .isThrownBy(
+                ()
+                    -> new GuestbookEntry(
+                        "", "foo@bar.com", "May the 4th be with you!"));
+    }
 
-	@Test
-	void rejectsEmptyText() {
+    @Test
+    void rejectsEmptyEmail() {
+        assertThatExceptionOfType(IllegalArgumentException.class) //
+            .isThrownBy(() -> new GuestbookEntry("Ollie", "", "test"));
+    }
 
-		assertThatExceptionOfType(IllegalArgumentException.class)//
-				.isThrownBy(() -> new GuestbookEntry("Ollie", ""));
-	}
+    @Test
+    void rejectsEmptyText() {
 
-	@Test
-	void setsCreationDate() {
-		assertThat(new GuestbookEntry("Ollie", "May the 4th be with you!").getDate()).isNotNull();
-	}
+        assertThatExceptionOfType(IllegalArgumentException.class) //
+            .isThrownBy(() -> new GuestbookEntry("Ollie", "foo@bar.com", ""));
+    }
+
+    @Test
+    void setsCreationDate() {
+        assertThat(new GuestbookEntry(
+                       "Ollie", "foo@bar.com", "May the 4th be with you!")
+                       .getDate())
+            .isNotNull();
+    }
 }

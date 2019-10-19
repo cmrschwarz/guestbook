@@ -24,7 +24,8 @@ import javax.persistence.Id;
 import org.springframework.util.Assert;
 
 /**
- * A guestbook entry. An entity as in the Domain Driven Design context. Mapped onto the database using JPA annotations.
+ * A guestbook entry. An entity as in the Domain Driven Design context. Mapped
+ * onto the database using JPA annotations.
  *
  * @author Paul Henke
  * @author Oliver Drotbohm
@@ -33,46 +34,54 @@ import org.springframework.util.Assert;
 @Entity
 class GuestbookEntry {
 
-	private @Id @GeneratedValue Long id;
-	private final String name, text;
-	private final LocalDateTime date;
+    private @Id @GeneratedValue Long id;
+    private final String name, email, text;
+    private final LocalDateTime date;
 
-	/**
-	 * Creates a new {@link GuestbookEntry} for the given name and text.
-	 *
-	 * @param name must not be {@literal null} or empty
-	 * @param text must not be {@literal null} or empty
-	 */
-	public GuestbookEntry(String name, String text) {
+    /**
+     * Creates a new {@link GuestbookEntry} for the given name and text.
+     *
+     * @param name must not be {@literal null} or empty
+     * @param text must not be {@literal null} or empty
+     */
+    public GuestbookEntry(String name, String email, String text) {
 
-		Assert.hasText(name, "Name must not be null or empty!");
-		Assert.hasText(text, "Text must not be null or empty!");
+        Assert.hasText(name, "Name must not be null or empty!");
+        Assert.hasText(email, "Email must not be null or empty!");
+        Assert.hasText(text, "Text must not be null or empty!");
 
-		this.name = name;
-		this.text = text;
-		this.date = LocalDateTime.now();
-	}
+        this.name = name;
+        this.email = email;
+        this.text = text;
 
-	@SuppressWarnings("unused")
-	private GuestbookEntry() {
-		this.name = null;
-		this.text = null;
-		this.date = null;
-	}
+        this.date = LocalDateTime.now();
+    }
 
-	public String getName() {
-		return name;
-	}
+    @SuppressWarnings("unused")
+    private GuestbookEntry() {
+        this.name = null;
+        this.email = null;
+        this.text = null;
+        this.date = null;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public LocalDateTime getDate() {
-		return date;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

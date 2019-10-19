@@ -15,7 +15,7 @@
  */
 package guestbook;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.transaction.Transactional;
 
@@ -27,8 +27,9 @@ import org.springframework.data.domain.Sort;
 /**
  * Integration tests for {@link GuestbookRepository}.
  * <p>
- * Bootstraps the application using the {@link Application} configuration class. Enables transaction rollbacks after
- * test methods using the {@link Transactional} annotation.
+ * Bootstraps the application using the {@link Application} configuration class.
+ * Enables transaction rollbacks after test methods using the {@link
+ * Transactional} annotation.
  *
  * @author Oliver Drotbohm
  * @author Paul Henke
@@ -37,21 +38,24 @@ import org.springframework.data.domain.Sort;
 @Transactional
 class GuestbookRepositoryIntegrationTests {
 
-	@Autowired GuestbookRepository repository;
+    @Autowired GuestbookRepository repository;
 
-	@Test
-	void persistsGuestbookEntry() {
+    @Test
+    void persistsGuestbookEntry() {
 
-		GuestbookEntry entry = repository.save(new GuestbookEntry("Yoda", "May the force be with you!"));
+        GuestbookEntry entry = repository.save(new GuestbookEntry(
+            "Yoda", "foo@bar.com", "May the force be with you!"));
 
-		assertThat(repository.findAll()).contains(entry);
-	}
+        assertThat(repository.findAll()).contains(entry);
+    }
 
-	@Test // #34
-	void findsGuestbookEntryByAuthorName() {
+    @Test // #34
+    void findsGuestbookEntryByAuthorName() {
 
-		GuestbookEntry entry = repository.save(new GuestbookEntry("Yoda", "May the force be with you!"));
+        GuestbookEntry entry = repository.save(new GuestbookEntry(
+            "Yoda", "foo@bar.com", "May the force be with you!"));
 
-		assertThat(repository.findByName("Yoda", Sort.by("date"))).contains(entry);
-	}
+        assertThat(repository.findByName("Yoda", Sort.by("date")))
+            .contains(entry);
+    }
 }

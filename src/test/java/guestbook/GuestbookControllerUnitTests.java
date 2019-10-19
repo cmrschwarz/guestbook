@@ -15,8 +15,10 @@
  */
 package guestbook;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,23 +36,25 @@ import org.springframework.ui.Model;
 @ExtendWith(MockitoExtension.class)
 class GuestbookControllerUnitTests {
 
-	@Mock GuestbookRepository guestbook;
+    @Mock GuestbookRepository guestbook;
 
-	@Test
-	void populatesModelForGuestbook() {
+    @Test
+    void populatesModelForGuestbook() {
 
-		GuestbookEntry entry = new GuestbookEntry("Yoda", "May the 4th b with you!");
-		doReturn(Streamable.of(entry)).when(guestbook).findAll();
+        GuestbookEntry entry = new GuestbookEntry(
+            "Yoda", "foo@bar.com", "May the 4th b with you!");
+        doReturn(Streamable.of(entry)).when(guestbook).findAll();
 
-		Model model = new ExtendedModelMap();
+        Model model = new ExtendedModelMap();
 
-		GuestbookController controller = new GuestbookController(guestbook);
-		String viewName = controller.guestBook(model, new GuestbookForm(null, null));
+        GuestbookController controller = new GuestbookController(guestbook);
+        String viewName =
+            controller.guestBook(model, new GuestbookForm(null, null, null));
 
-		assertThat(viewName).isEqualTo("guestbook");
-		assertThat(model.asMap().get("entries")).isInstanceOf(Iterable.class);
-		assertThat(model.asMap().get("form")).isNotNull();
+        assertThat(viewName).isEqualTo("guestbook");
+        assertThat(model.asMap().get("entries")).isInstanceOf(Iterable.class);
+        assertThat(model.asMap().get("form")).isNotNull();
 
-		verify(guestbook, times(1)).findAll();
-	}
+        verify(guestbook, times(1)).findAll();
+    }
 }

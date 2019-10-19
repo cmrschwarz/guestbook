@@ -16,11 +16,6 @@
 <body>
     <h1 class="text-center" th:text="#{guestbook.title}">Gästebuch</h1>
 
-    <div class="checkbox text-center">
-        <input type="checkbox" id="use_ajax" />
-        <label for="use_ajax" th:text="#{guestbook.useajax}">Ajax nutzen</label>
-    </div>
-
     <div class="text-center">
         <a sec:authorize="isAnonymous()" href="/login">Login</a>
         <a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
@@ -32,44 +27,59 @@
         <div th:each="entry, it : ${entries}" th:with="index = ${it.count}">
             <div class="card" th:fragment="entry" th:id="entry+${entry.id}">
                 <div class="card-header">
-                    <form sec:authorize="hasRole('ADMIN')" th:method="delete"
-                        th:action="@{/guestbook/{id}(id=${entry.id})}" th:attr="data-entry-id=${entry.id}">
-                        <button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right">
-                            <span class="fas fa-times"></span>
-                        </button>
-                    </form>
+                    <div sec:authorize="hasRole('ADMIN')" th:attr="data-entry-id=${entry.id}">
+                        <form id="card_delete" th:method="delete" th:action="@{/guestbook/{id}(id=${entry.id})}">
+                            <button th:title="#{guestbook.form.delete}" class="btn btn-sm float-right">
+                                <span class="fas fa-times"></span>
+                            </button>
+                        </form>
+                        <form id="card_edit" th:method="edit" th:action="@{/guestbook/{id}(id=${entry.id})}">
+                            <button th:title="#{guestbook.form.edit}" class="btn btn-sm float-right">
+                                <span class="fas fa-edit"></span>
+                            </button>
+                        </form>
+                        <form id="card_save" th:method="save" th:action="@{/guestbook/{id}(id=${entry.id})}"
+                            style="display: none;">
+                            <button th:title="#{guestbook.form.save}" class="btn btn-sm float-right">
+                                <span class="fas fa-save"></span>
+                            </button>
+                        </form>
+                    </div>
                     <h4 th:text="${index} + '. ' + ${entry.name}" class="card-title">1. Posting</h4>
                 </div>
                 <div class="card-body">
-						<blockquote class="entrytext" th:text="${entry.text}"></blockquote>
+                    <blockquote id="card_content" class="entrytext" th:text="${entry.text}"></blockquote>
+                    <textarea id="card_content_editable" class="entrytext" th:text="${''}"
+                        style="display: none;"></textarea>
                 </div>
                 <div class="card-footer">
                     <footer class="date float-right" th:text="${#temporals.format(entry.date, 'dd. MMMM yyyy - HH:mm')}">Datum</footer>
-                     <label th:text="${entry.email}">Datum</label>
-					</div>
-				</div>
-			</div>
-		</div>
+                        <label th:text="${entry.email}">Datum</label>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
 
-	
-		<form method="post" role="form" class="gb-form" id="form" th:action="@{/guestbook}" th:object="${form}">
-			<div class="form-group">
-				<label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
-				<input class="form-control" type="text" th:field="*{name}" th:errorclass="is-invalid" required="required" />
-				<div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" th:text="#{guestbook.form.name.required}">Please provide a name.</div> 
-            </div>
-            <div class="form-group">
-                <label for="email" th:text="#{guestbook.form.email}">Email</label><br /> 
-				<input class="form-control" type="text" th:field="*{email}" th:errorclass="is-invalid" required="required" />
-				<div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:text="#{guestbook.form.email.required}">Please provide a name.</div> 
-            </div>
-            <div class="form-group">
-				<label for="text" th:text="#{guestbook.form.text}">Text</label><br /> 
-				<textarea th:field="*{text}" th:errorclass="is-invalid" class="form-control" required="required"></textarea>
-                <div th:if="${#fields.hasErrors('text')}" class="invalid-feedback" th:text="#{guestbook.form.text.required}">Please provide a text.</div>
-			</div>
-			<input type="submit" class="btn btn-secondary" th:value="#{guestbook.form.submit}" value="Senden" />
-		</form>
+    <form method="post" role="form" class="gb-form" id="form" th:action="@{/guestbook}" th:object="${form}">
+        <div class="form-group">
+            <label for="name" th:text="#{guestbook.form.name}">Name</label><br /> 
+            <input class="form-control" type="text" th:field="*{name}" th:errorclass="is-invalid" required="required" />
+            <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" th:text="#{guestbook.form.name.required}">Please provide a name.</div> 
+        </div>
+        <div class="form-group">
+            <label for="email" th:text="#{guestbook.form.email}">Email</label><br /> 
+            <input class="form-control" type="text" th:field="*{email}" th:errorclass="is-invalid" required="required" />
+            <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:text="#{guestbook.form.email.required}">Please provide a name.</div> 
+        </div>
+        <div class="form-group">
+            <label for="text" th:text="#{guestbook.form.text}">Text</label><br /> 
+            <textarea th:field="*{text}" th:errorclass="is-invalid" class="form-control" required="required"></textarea>
+            <div th:if="${#fields.hasErrors('text')}" class="invalid-feedback" th:text="#{guestbook.form.text.required}">Please provide a text.</div>
+        </div>
+        <input type="submit" class="btn btn-secondary" th:value="#{guestbook.form.submit}" value="Senden" />
+    </form>
 
 	</body>
 </html>

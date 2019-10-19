@@ -3,8 +3,9 @@ div#entries, #form {
 	width: 50%;
 }
 
+
 .card {
-	margin-bottom: 2em;
+    margin-bottom: 2em;
 }
 
 .card-title {
@@ -21,4 +22,7 @@ blockquote {
 
 form#form {
 	padding: 0 1.25em;
+}
+#card_content_editable{
+    width: 100%;
 }
